@@ -25,6 +25,7 @@ class Graph
     int V;      //number of verticies
     list<int> *adj;    // Pointer to a list of adjacency verticies
     vector<char> vertices;
+    vector<string> someColors;
 public:
     // Constructor and destructor
     Graph(int V)
@@ -35,6 +36,30 @@ public:
         char let = 'A';
         for(int i = 0; i < V; i++)
             vertices.push_back(let++);
+
+        someColors.reserve(V);
+        for(int i = 0; i < V; i++)
+        {
+            switch(i)
+            {
+            case 0: someColors.push_back("Red");
+                break;
+            case 1: someColors.push_back("Blue");
+                break;
+            case 2: someColors.push_back("Green");
+                break;
+            case 3: someColors.push_back("Yellow");
+                break;
+            case 4: someColors.push_back("Orange");
+                break;
+            case 5: someColors.push_back("Purple");
+                break;
+            case 6: someColors.push_back("Pink");
+                break;
+            default: // the rest will just be numbered
+                someColors.push_back(to_string(i));
+            }
+        }
     }
 
     ~Graph()
@@ -85,9 +110,18 @@ void Graph::greedyColoring()
         for(cr = 0; cr < V; cr++)
             if(colored[cr] == false)
                 break;
+
+        result[u] = cr; //assign color found
+
+        // reset values for the following iteration
+        for(it = adj[u].begin(); it != adj[u].end(); ++it)
+            if(result[*it] != -1)
+                colored[result[*it]] = false;
     }
 
-
+    //printing our results!
+    for(int u = 0; u < V; u++)
+        cout << "color(" << vertices.at(u) << ") = " << someColors[result[u]] << endl;
 }
 
 /**
@@ -115,4 +149,5 @@ int main()
     g1.addEdge(F, B); g1.addEdge(C, B); g1.addEdge(C, E);
 
     g1.greedyColoring();
+
 }
